@@ -11,6 +11,7 @@ const PUBLIC_URL = process.env.PUBLIC_URL;
 const getUsers = async (req, res) => {
     try{
         const data = await userModel.findAll({});
+        console.log('Esto es una prueba de sincronización');
         res.send({data});
     }
     catch(e){
