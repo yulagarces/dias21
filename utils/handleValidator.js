@@ -6,8 +6,9 @@ const validateResults = (req, res, next) => {
         return next(); //TODO Continúa hacia el controlador
     }
     catch(err){
-        res.status(403)
-        res.send({errors: err.array()})
+        console.log('Error de validación', err);
+        res.status(403);
+        res.send({errors: err.array()});
 
     }
 }

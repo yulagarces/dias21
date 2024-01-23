@@ -2,6 +2,8 @@ const {userModel} = require('../models');
 const { handleHttpError } = require('../utils/handleError');
 const {encypt, compare} = require('../utils/handlePassword');
 const PUBLIC_URL = process.env.PUBLIC_URL;
+const {tokenSign} = require("../utils/handleJwt");
+const { matchedData } = require('express-validator');
 
 /**
  * Obtener el listado de usuario de la base de datos
@@ -67,10 +69,6 @@ const getUserDocumento = async (req, res) => {
 const createUser = async (req, res) => {
    try{
     const { body,file } = req
-     
-  
-    //const body2 = {...req, usu_contrasenia };
-
     const fileData = {
         usu_dni: body.usu_dni,
         usu_documento: Math.floor(body.usu_documento),
@@ -80,17 +78,57 @@ const createUser = async (req, res) => {
         filename: file.filename,
         usu_edad:Math.floor(body.usu_edad),
         usu_foto: `${PUBLIC_URL}/${file.filename}`,
-        usu_nombre: body.usu_nombre
+        usu_nombre: body.usu_nombre,
+        usu_rol: body.usu_rol
     }
 
     const data =  await userModel.create(fileData)
     data.set("usu_contrasenia", undefined, {strict:false});
-    res.send({data})}
+    const userData ={
+        token: await tokenSign(data),
+        user:data
+    };
+    res.send({userData})}
     catch(e){
         console.error(e);
-        handleHttpError(res, "ERROR_CREATE_USUARIO", 500);
+        handleHttpError(res, "ERROR_REGISTRAR_USUARIO", 500);
     }
 
+};
+
+/**
+ * Iniciar sesión con correo y contraseña
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+const loginCtrl = async (req, res) => {
+    try{
+        const {body} = req;
+        const user = await userModel.findOne(
+            {where: {usu_correo:body.usu_correo}});
+       
+        if(!user){
+            handleHttpError(res, "USER_NOT_EXIST", 404);
+            return;
+        }
+        
+        const check = await compare(body.usu_contrasenia, user.usu_contrasenia);
+        if(!check){
+            handleHttpError(res, "PASSWORD_INVALID", 401);
+            return;
+        }
+        const data = {
+            token: await tokenSign(user),
+            user
+        };
+        user.set('usu_contrasenia', undefined, {strict:false});
+        res.send({data});
+    }
+    catch(e){
+        console.log(e);
+        handleHttpError(res, "ERROR_LOGIN_USUARIO", 500);
+    }
 };
 
 /**
@@ -118,7 +156,8 @@ const updateUser = async (req, res) => {
         data.usu_contrasenia= body.usu_contrasenia,
         data.usu_foto = `${PUBLIC_URL}/${file.filename}`,
         data.usu_edad = body.usu_edad,
-        data.usu_nombre = body.usu_nombre
+        data.usu_nombre = body.usu_nombre,
+        data.usu_rol = body.usu_rol
 
         await data.save();
         console.log(data);
@@ -154,4 +193,4 @@ const deleteUser = async (req, res) => {
     }
 };
 
-module.exports = {getUser, getUsers, getUserDocumento, createUser, updateUser, deleteUser};
+module.exports = {getUser, getUsers, getUserDocumento, createUser, updateUser, deleteUser, loginCtrl};

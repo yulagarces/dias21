@@ -38,7 +38,11 @@ const User = sequelize.define(
         usu_nombre: {
             type:DataTypes.STRING,
             allowNull: false,
-        }
+        },
+        usu_rol: {
+            type:DataTypes.ENUM(["Admin","Usuario","Invitado"]),
+            allowNull: false,
+        },
 
     },
     {

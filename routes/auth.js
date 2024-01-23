@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const uploadMiddleware = require("../utils/handleStorage");
-const {getUsers, getUser, createUser, getUserDocumento, updateUser, deleteUser} = require("../controllers/auth");
+const {createUser, loginCtrl} = require("../controllers/auth");
 const {validatorRegister} = require("../validators/auth");
 const customHeader = require("../middleware/customHeader");
 
@@ -9,6 +9,7 @@ const customHeader = require("../middleware/customHeader");
 //TODO: http://localhost/tracks GET, POST, DELETE, PUT
 
 router.post("/register",uploadMiddleware.single("usu_foto"), validatorRegister,customHeader, createUser);
+router.post("/login",customHeader, loginCtrl);
 /*
 router.get("/", customHeader, getUsers);
 router.get("/:id", validatorGetUsuario, customHeader, getUser);
