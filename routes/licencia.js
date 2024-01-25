@@ -5,18 +5,19 @@ const {getLicencia, getLicencias, getLicenciaPaymentId, getLicenciaUserId, creat
     updateLicencia, deleteLicencia} = require("../controllers/licencia");
 const {validatorGetLicencia, validatorInsertLicencia, validatorUpdateLicencia} = require("../validators/licencia");
 const customHeader = require("../middleware/customHeader");
+const {authMiddleware} = require("../middleware/session");
 const app = express();
 app.use(express.json());
 
 
 //TODO: http://localhost/tracks GET, POST, DELETE, PUT
 
-router.get("/",  customHeader, getLicencias);
-router.get("/:id", validatorGetLicencia, customHeader, getLicencia);
-router.get("/usu/:id", validatorGetLicencia, customHeader, getLicenciaUserId);
-router.get("/pay/:id", validatorGetLicencia, customHeader, getLicenciaPaymentId);
-router.post("/",  validatorInsertLicencia, customHeader, createLicencia);
-router.put("/:id", validatorUpdateLicencia, customHeader, updateLicencia);
-router.delete("/:id", validatorGetLicencia, customHeader, deleteLicencia);
+router.get("/",  authMiddleware, getLicencias);
+router.get("/:id", validatorGetLicencia, authMiddleware, getLicencia);
+router.get("/usu/:id", validatorGetLicencia, authMiddleware, getLicenciaUserId);
+router.get("/pay/:id", validatorGetLicencia, authMiddleware, getLicenciaPaymentId);
+router.post("/",  validatorInsertLicencia, authMiddleware, createLicencia);
+router.put("/:id", validatorUpdateLicencia, authMiddleware, updateLicencia);
+router.delete("/:id", validatorGetLicencia, authMiddleware, deleteLicencia);
 
 module.exports = router;

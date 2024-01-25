@@ -40,6 +40,6 @@ const Categoria = sequelize.define(
     }
 );
 
-//Categoria.hasMany(Subcategoria);
+
 module.exports = Categoria;
     

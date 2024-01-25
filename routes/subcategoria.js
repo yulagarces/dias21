@@ -1,20 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const uploadMiddleware = require("../utils/handleStorage");
-const {getSubcategorias, getSubcategoria, createSubcategoria, updateSubcategoria, deleteSubcategoria, getSubcategoriaCatId} = require("../controllers/subcategoria");
+const {getSubcategorias, getSubcategoriasFull, getSubcategoria, createSubcategoria, updateSubcategoria, deleteSubcategoria, getSubcategoriaCatId} = require("../controllers/subcategoria");
 const {validatorGetSubcategoria, validatorInsertSubcategoria, validatorUpdateSubcategoria} = require("../validators/subcategoria");
-const customHeader = require("../middleware/customHeader");
+const {authMiddleware} = require("../middleware/session");
 const app = express();
 app.use(express.json());
 
 
 //TODO: http://localhost/tracks GET, POST, DELETE, PUT
 
-router.get("/",  customHeader, getSubcategorias);
-router.get("/:id", validatorGetSubcategoria, customHeader, getSubcategoria);
-router.get("/buscar-sub-cat/:id", validatorGetSubcategoria, customHeader, getSubcategoriaCatId);
-router.post("/",  validatorInsertSubcategoria, customHeader, createSubcategoria);
-router.put("/:id", validatorUpdateSubcategoria, customHeader, updateSubcategoria);
-router.delete("/:id", validatorGetSubcategoria, customHeader, deleteSubcategoria);
+router.get("/",  authMiddleware, getSubcategorias);
+router.get("/full/",  authMiddleware, getSubcategoriasFull);
+router.get("/:id", validatorGetSubcategoria, authMiddleware, getSubcategoria);
+router.get("/buscar-sub-cat/:id", validatorGetSubcategoria, authMiddleware, getSubcategoriaCatId);
+router.post("/",  validatorInsertSubcategoria, authMiddleware, createSubcategoria);
+router.put("/:id", validatorUpdateSubcategoria, authMiddleware, updateSubcategoria);
+router.delete("/:id", validatorGetSubcategoria, authMiddleware, deleteSubcategoria);
 
 module.exports = router;

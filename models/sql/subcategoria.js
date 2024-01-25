@@ -1,6 +1,6 @@
 const {sequelize}= require("../../config/mysql")
 const {DataTypes} = require("sequelize");
-const {Categoria} = require("./categoria");
+const {categoriaModel} = require("./categoria");
 
 const Subcategoria = sequelize.define(
     "subcategoria",
@@ -23,13 +23,9 @@ const Subcategoria = sequelize.define(
             type:DataTypes.STRING,
             allowNull: false,
         },
-        cat_id: {
+        cat_id_f: {
             type:DataTypes.INTEGER,
             allowNull: false,
-            references:{
-                model: 'Categoria',
-                key: 'cat_id'
-            }
         },
         sub_color: {
             type:DataTypes.STRING,
@@ -40,11 +36,6 @@ const Subcategoria = sequelize.define(
         timestamps: true,
     }
 );
-
-
-Subcategoria.associations = (models) => {
-    Subcategoria.belongsTo(Categoria, {foreignKey: 'cat_id'});
-};
 
 module.exports = Subcategoria;
     

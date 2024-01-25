@@ -75,7 +75,8 @@ const createUser = async (req, res) => {
         filename: file.filename,
         usu_edad:Math.floor(body.usu_edad),
         usu_foto: `${PUBLIC_URL}/${file.filename}`,
-        usu_nombre: body.usu_nombre
+        usu_nombre: body.usu_nombre,
+        usu_rol: body.usu_rol
     }
     const data =  await userModel.create(fileData)
     res.send({data})}

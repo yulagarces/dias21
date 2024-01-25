@@ -18,7 +18,7 @@ const tokenSign = async (user) =>{
         }
         
 );
-console.log('Esta es la firma',sign);
+
 return sign;
 
 };
@@ -28,9 +28,11 @@ return sign;
  */
 const verifyToken = async(tokenJwt) => {
     try{
-        return jwt.verifyToken(tokenJwt, JWT_SECRET);
+        
+        return jwt.verify(tokenJwt, JWT_SECRET);
     }
     catch(e){
+        console.log('Error del token: ' , e)
         return null;
     }
 };

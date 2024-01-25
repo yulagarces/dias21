@@ -15,8 +15,9 @@ app.use(express.json());
  */
 const getCategorias = async (req, res) => {
     try{
+        const user = req.user;
         const data = await categoriaModel.findAll({});
-        res.send({data});
+        res.send({data, user});
     }
     catch(e){
         handleHttpError(res, "ERROR AL OBTENER CATEGORIAS", 500);

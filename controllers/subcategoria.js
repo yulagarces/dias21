@@ -1,5 +1,5 @@
 const {matchedData } = require('express-validator');
-const {subcategoriaModel} = require('../models'); 
+const {subcategoriaModel, categoriaModel} = require('../models'); 
 const { handleHttpError } = require('../utils/handleError');
 const PUBLIC_URL = process.env.PUBLIC_URL;
 const express = require("express");
@@ -18,6 +18,32 @@ const getSubcategorias = async (req, res) => {
         if(!data){
             return res.status(404).json({error: 'No existen subcategorias'});
         }
+        res.send({data});
+    }
+    catch(e){
+        console.log(e);
+        handleHttpError(res, "ERROR AL OBTENER SUBCATEGORIAS", 500);
+    }
+    
+};
+/**
+ * Obtener el listado de subcategorias junto con categorías de la base de datos
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getSubcategoriasFull = async (req, res) => {
+    try{
+        subcategoriaModel.belongsTo(categoriaModel, {
+            foreignKey: 'cat_id_f',
+            as: "cate",
+        });
+        const data = await subcategoriaModel.findAll({
+            include: "cate"});
+        if(!data){
+            handleHttpError(res, "SUBCATEGORIAS_FULL_NOT_FOUND", 500);
+            return;
+        }
+          console.log('Esta es la data final: ', data);
         res.send({data});
     }
     catch(e){
@@ -150,4 +176,4 @@ const deleteSubcategoria = async (req, res) => {
 };
 
 module.exports = {getSubcategoria, getSubcategorias, createSubcategoria, updateSubcategoria,
-     deleteSubcategoria, getSubcategoriaCatId};
+     deleteSubcategoria, getSubcategoriaCatId, getSubcategoriasFull};
