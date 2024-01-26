@@ -166,7 +166,7 @@ const deleteLicencia = async (req, res) => {
             return res.status(404).json({error: 'Licencia no encontrada'});
         }
         await data.destroy();
-        res.json({error: 'Licencia eliminada exitosamente'});
+        res.json({ok: 'Licencia eliminada exitosamente'});
     }
     catch(e){
         handleHttpError(res, "ERROR_DELETE_LICENCIA", 500);

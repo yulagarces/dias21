@@ -303,7 +303,7 @@ const swaggerDefinition = {
           },
           usu_genero: {
             type: "string",
-            enum: ["Femenino","Masculion","LGBTQIA+"]
+            enum: ["Femenino","Masculino","LGBTQIA+"]
           },
           usu_contrasenia: {
             type: "string",

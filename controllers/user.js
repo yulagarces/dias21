@@ -98,6 +98,7 @@ const updateUser = async (req, res) => {
         const data = await userModel.findOne(
             {where: {usu_documento:usu_docu}}
         );
+        console.log('Usuario a actualizar:', data);
      
         if(!data){
            return res.status(404).json({error: 'Usuario no fue encontrado'});
@@ -112,7 +113,8 @@ const updateUser = async (req, res) => {
         data.usu_contrasenia= body.usu_contrasenia,
         data.usu_foto = `${PUBLIC_URL}/${file.filename}`,
         data.usu_edad = body.usu_edad,
-        data.usu_nombre = body.usu_nombre
+        data.usu_nombre = body.usu_nombre,
+        data.usu_rol = body.usu_rol
 
         await data.save();
         console.log(data);

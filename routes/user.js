@@ -118,7 +118,7 @@ router.get("/docu/:id", authMiddleware, getUserDocumento);
  */
 router.post("/",uploadMiddleware.single("usu_foto"), validatorCreateUser,authMiddleware, createUser);
 /**
- * Obtener un usuario por id
+ * Actualizar un usuario por documento de identidad
  * @openapi
  * /user/{id}:
  *    put:
@@ -135,28 +135,27 @@ router.post("/",uploadMiddleware.single("usu_foto"), validatorCreateUser,authMid
  *        required: true
  *        schema:
  *          type: integer
+ *      requestBody: 
+ *          content:
+ *           multipart/form-data:
+ *             schema:
+ *               $ref: '#/components/schemas/usuarios'
  *      responses:
  *        '200':
  *          description: Usuario actualizado exitosamente.
- *          content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/usuarios'
  *        '422':
  *          description: Error de validacion.
  */
 router.put("/:id",uploadMiddleware.single("usu_foto"), validatorUpdateUser,authMiddleware, updateUser);
 /**
- * Obtener un usuario por id
+ * Eliminar un usuario por documento de identidad
  * @openapi
  * /user/{id}:
  *    delete:
  *      tags:
  *        - usuarios
  *      summary: "Eliminar usuario"
- *      description: Eliminar usuario por llave primaria
+ *      description: Eliminar usuario por documento de identidad
  *      security:
  *        - bearerAuth: []
  *      parameters:

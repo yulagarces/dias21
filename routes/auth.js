@@ -31,13 +31,31 @@ const customHeader = require("../middleware/customHeader");
  *              
  */
 router.post("/register",uploadMiddleware.single("usu_foto"), validatorRegister,customHeader, createUser);
-router.post("/login",customHeader, loginCtrl);
-/*
-router.get("/", customHeader, getUsers);
-router.get("/:id", validatorGetUsuario, customHeader, getUser);
-router.get("/docu/:id", customHeader, getUserDocumento);
-
-router.put("/:id",uploadMiddleware.single("usu_foto"), validatorUpdateUser,customHeader, updateUser);
-router.delete("/:id", validatorGetUsuarioDocumento, customHeader, deleteUser);*/
+/**
+ * Login user
+ * @openapi
+ * /auth/login:
+ *    post:
+ *      tags:
+ *        - auth
+ *      summary: "Login user"
+ *      description: Iniciar session a un nuevo usuario y obtener el token de sesión
+ *      responses:
+ *        '200':
+ *          description: Retorna el objeto insertado en la colección.
+ *        '422':
+ *          description: Error de validación.
+ *      requestBody:
+ *          content:
+ *            application/json:
+ *              schema:
+ *                 $ref: "#/components/schemas/authLogin"
+ *    responses:
+ *      '201':
+ *        description: Retorna el objeto insertado en la coleccion con estado '201'
+ *      '403':
+ *        description: No tiene permisos '403'
+ */
+router.post("/login", loginCtrl);
 
 module.exports = router;

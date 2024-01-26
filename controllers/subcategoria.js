@@ -82,7 +82,7 @@ const getSubcategoriaCatId = async (req, res) => {
     try{
         const cat_id = req.params.id;
         const data = await subcategoriaModel.findAll(
-            {where: {cat_id:cat_id}}
+            {where: {cat_id_f:cat_id}}
         );
         if(!data){
             return res.status(404).json({error: 'Subcategoría no encontrada'});
@@ -108,7 +108,7 @@ const createSubcategoria = async (req, res) => {
              sub_nombre: body.sub_nombre,
              sub_imagen_claro: body.sub_imagen_claro,
              sub_imagen_oscuro: body.sub_imagen_oscuro,
-             cat_id: body.cat_id,
+             cat_id_f: body.cat_id_f,
              sub_color : body.sub_color
         }
      

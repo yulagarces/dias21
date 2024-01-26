@@ -1,5 +1,5 @@
 const { body, matchedData } = require('express-validator');
-const {categoriaModel} = require('../models'); 
+const {categoriaModel, subcategoriaModel} = require('../models'); 
 const { handleHttpError } = require('../utils/handleError');
 const PUBLIC_URL = process.env.PUBLIC_URL;
 const express = require("express");
@@ -53,9 +53,15 @@ const getCategoria = async (req, res) => {
 const getCategoriaSubcategorias = async (req, res) => {
     try{
         const id = req.params.id;
-        const data = await Categoria.findByPk(id, {
-            include : Subcategoria
+        categoriaModel.hasMany(subcategoriaModel, {
+            foreignKey: 'cat_id_f',
+            as: "sub",
         });
+        const data = await categoriaModel.findAll({where:{cat_id:id},
+            include: "sub"});
+        //const data = await Categoria.findByPk(id, {
+        //    include : Subcategoria
+        //});
         if(!data){
             return res.status(404).json({error: 'Categoría no encontrada'});
         }
