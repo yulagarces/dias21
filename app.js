@@ -21,7 +21,12 @@ app.get("/", (req,res) => {
 });
 
 app.use("/api", require("./routes"));
-
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+  });
 /**
  * Invocación de rutas
  */
@@ -32,6 +37,7 @@ app.listen(puerto, () => {
  * Ruta de documentación
 */
 app.use('/documentation', swaggerUI.serve, swaggerUI.setup(openApiConfigration));
+
 
 dbConnectMysql();
 
